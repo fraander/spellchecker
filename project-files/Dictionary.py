@@ -1,27 +1,26 @@
 class Dictionary:
     def find_similar(self, word):
-
         similar = []
         # Try scoring each word on number of letters different from the given word. Scores that are 1 or 2 get
         # marked as suggestions
 
         for entry in self.data.keys():
-            if len(word) != len(entry):
-                break
+            if entry == word:  # check it's not the same word
+                continue
 
-            print("len:", entry)
+            if len(entry) != len(word):  # check the lengths match
+                continue
 
-            # if len(word) - 1 > len(entry) or len(word) + 1 > len(entry):
-            #    break
-
-            diff = 0
-            for i, c in enumerate(word):
-                if word[i] != entry[i]:
+            diff = 0  # count the number of characters which are different
+            thresh = 1 if len(word) < 6 else len(word) // 3
+            for index, char in enumerate(word):
+                if word[index] != entry[index]:
                     diff += 1
-                if diff > 2:
+
+                if diff > thresh:
                     break
 
-            if diff < 2:
+            if diff <= thresh:
                 similar.append(entry)
 
         return similar

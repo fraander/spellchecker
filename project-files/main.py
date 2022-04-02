@@ -6,5 +6,4 @@ from Dictionary import Dictionary
 
 GrammarChecker()
 
-d = Dictionary()
-print(d.find_similar("word"))
+print(Dictionary().find_similar("word"))

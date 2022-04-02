@@ -17,11 +17,11 @@ from Dictionary import Dictionary
 # TODO: cannot handle whitespace at end of file right now
 
 class GrammarChecker:
-    def __init__(self):
+    def __init__(self, filename="doc.txt"):
         dictionary = Dictionary().data
 
         with open("output.txt", 'w') as o:
-            with open("doc.txt", 'r') as f:
+            with open(filename, 'r') as f:
                 buffer = ""
 
                 while True:

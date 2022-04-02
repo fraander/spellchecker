@@ -1,9 +1,28 @@
 class Dictionary:
     def find_similar(self, word):
 
-        similar = []  # TODO find similar words
+        similar = []
         # Try scoring each word on number of letters different from the given word. Scores that are 1 or 2 get
         # marked as suggestions
+
+        for entry in self.data.keys():
+            if len(word) != len(entry):
+                break
+
+            print("len:", entry)
+
+            # if len(word) - 1 > len(entry) or len(word) + 1 > len(entry):
+            #    break
+
+            diff = 0
+            for i, c in enumerate(word):
+                if word[i] != entry[i]:
+                    diff += 1
+                if diff > 2:
+                    break
+
+            if diff < 2:
+                similar.append(entry)
 
         return similar
 

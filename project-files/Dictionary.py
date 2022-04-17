@@ -9,13 +9,19 @@ class Dictionary:
         # score each word on number of different letters. Number below threshold makes it a valid suggestion
 
         ratio_min = 95
-        while not similar:
+
+        while len(similar) < 3 and ratio_min > 50:
             for entry in self.data.keys():
                 ratio = fuzz.ratio(entry, word)
+
                 if 100 > ratio > ratio_min:
-                    similar.append([entry, ratio])
-            if not similar:
-                ratio_min -= 5
+                    if [entry, ratio] in similar:
+                        pass
+                    else:
+                        similar.append([entry, ratio])
+
+            if len(similar) < 3:
+                ratio_min -= 3
 
         return sorted(similar, key=lambda s: s[1])
 

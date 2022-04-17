@@ -63,8 +63,29 @@ class GrammarChecker:
                                 word_in = True
 
                         if not word_in:
-                            print(Dictionary().find_similar(w))
-                            # TODO: ask user to pick from options, keep searching, or add their own word.
+                            options = Dictionary().find_similar(w)
+
+                            for index, option in enumerate(options):
+                                print("[", index, "]", option)
+
+                            opt_in = -1
+                            while opt_in == -1:
+                                opt_in = input("Which word would you like to use? [#] ")
+                                # TODO: ask user to pick from options, keep searching, or add their own word.
+
+                                try:
+                                    opt_in = int(opt_in)
+                                    print(options[opt_in])
+                                    # TODO: Better format this output and actually do something with it.
+                                except ValueError:
+                                    opt_in = -1
+                                    print("Invalid input. Try again.")
+                                except KeyError:
+                                    opt_in = -1
+                                    print("Invalid input. Try again.")
+                                except IndexError:
+                                    opt_in = -1
+                                    print("Invalid input. Try again.")
 
                         if buffer[:-1] + c == "\n":
                             o.write(buffer + "\n")

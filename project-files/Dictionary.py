@@ -1,28 +1,23 @@
+from fuzzywuzzy import fuzz
+
+
 class Dictionary:
     def find_similar(self, word):
+        # https://towardsdatascience.com/fuzzy-string-matching-in-python-68f240d910fe
+
         similar = []
         # score each word on number of different letters. Number below threshold makes it a valid suggestion
 
-        for entry in self.data.keys():
-            if entry == word:  # check it's not the same word
-                continue
+        ratio_min = 95
+        while not similar:
+            for entry in self.data.keys():
+                ratio = fuzz.ratio(entry, word)
+                if 100 > ratio > ratio_min:
+                    similar.append([entry, ratio])
+            if not similar:
+                ratio_min -= 5
 
-            if len(entry) != len(word):  # check the lengths match
-                continue
-
-            diff = 0  # count the number of characters which are different
-            thresh = 1 if len(word) < 6 else len(word) // 3
-            for index, char in enumerate(word):
-                if word[index] != entry[index]:  # TODO: check if the letter is one adjacent to the correct letter
-                    diff += 1
-
-                if diff > thresh:  # if above threshold already, next word
-                    break
-
-            if diff <= thresh:  # if below the threshold, add to matches list
-                similar.append(entry)
-
-        return similar
+        return sorted(similar, key=lambda s: s[1])
 
     def __init__(self):
         # Read dictionary file

@@ -63,7 +63,8 @@ class GrammarChecker:
                                 word_in = True
 
                         if not word_in:
-                            print(w)  # TODO: find alternative
+                            print(Dictionary().find_similar(w))
+                            # TODO: ask user to pick from options, keep searching, or add their own word.
 
                         if buffer[:-1] + c == "\n":
                             o.write(buffer + "\n")

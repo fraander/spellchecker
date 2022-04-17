@@ -1,7 +1,7 @@
-Before **creaating** your account, there are a few basic concepts to address. Below are some general questions and answers about Canvas, its **administratour** role, and the people who will support you throughout the process of creating an account.
+Before **creating** your account, there are a few basic concepts to address. Below are some general questions and answers about Canvas, its **administrators** role, and the people who will support you throughout the process of creating an account.
 
-Canvas is a Learning Management Platform. With its highly **intergated** learning products, you can build a digital learning environment to meet the unique challenges faced by your institution.  
+Canvas is a Learning Management Platform. With its highly **integrated** learning products, you can build a digital learning environment to meet the unique challenges faced by your institution.  
 
-Because Canvas is a web-based **syystem**, it doesn’t need to be installed on your computer. However, you’ll want to make sure that your computer meets the basic requirements to run Canvas. You’ll also want to verify that Canvas supports your web browser before you get started.
+Because Canvas is a web-based **system**, it doesn’t need to be installed on your computer. However, you’ll want to make sure that your computer meets the basic requirements to run Canvas. You’ll also want to verify that Canvas supports your web browser before you get started.
 
 In Canvas, administrative users are called Admins.  Admins oversee and manage an institution's Canvas account, or they may oversee and manage a sub-account within an institution’s Canvas account. 

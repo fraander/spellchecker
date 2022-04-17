@@ -64,19 +64,24 @@ class GrammarChecker:
 
                         if not word_in:
                             options = Dictionary().find_similar(w)
+                            options = options[::-1]
 
+                            print("**", buffer, "**", sep="")
                             for index, option in enumerate(options):
                                 print("[", index, "]", option)
+                            print("[" ,len(options), "]", "!! Custom Word !!")
 
                             opt_in = -1
                             while opt_in == -1:
                                 opt_in = input("Which word would you like to use? [#] ")
-                                # TODO: ask user to pick from options, keep searching, or add their own word.
 
                                 try:
                                     opt_in = int(opt_in)
-                                    print(options[opt_in])
-                                    # TODO: Better format this output and actually do something with it.
+
+                                    if opt_in == len(options):
+                                        buffer = GrammarChecker.get_custom(w)
+                                    else:
+                                        buffer = options[opt_in][0]
                                 except ValueError:
                                     opt_in = -1
                                     print("Invalid input. Try again.")
@@ -92,7 +97,14 @@ class GrammarChecker:
                         else:
                             if word_in:
                                 o.write(buffer + c)
+                                print(buffer + c, end="")
                             else:
                                 o.write("**" + buffer + "**" + c)
+                                print(buffer + c, end="")
 
                         buffer = ""  # when done, clear the buffer
+
+    @staticmethod
+    def get_custom(w):
+        word = input(f"Replace {w} with: ")
+        return word

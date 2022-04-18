@@ -61,7 +61,7 @@ class GrammarChecker:
                         if not word_in:  # if the word was not found
                             options = Dictionary().find_similar(w)  # find similar words
                             GrammarChecker.print_options(options, buffer)  # print options
-                            GrammarChecker.get_choice(options, w)  # get choice from user
+                            buffer = GrammarChecker.get_choice(options, w)  # get choice from user
 
                         o.write(buffer)  # check for type of trailing whitespace
                         if buffer[:-1] + c == "\n":  # if new-line, change c to new-line

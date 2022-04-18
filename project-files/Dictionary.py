@@ -1,11 +1,18 @@
 import string
-
 from fuzzywuzzy import fuzz
 
 
 class Dictionary:
-
+    """
+    Handles dictionary data and string convenience methods such as finding similar words, cleaning strings,
+    and checking if the word is in the dictionary.
+    """
     def find_similar(self, word):
+        """
+        Find words similar to given word
+        :param word: word to search for words that are similar
+        :return: similar words
+        """
         similar = []
         ratio_min = 95  # set initial fuzzy-wuzzy threshold
 
@@ -29,6 +36,11 @@ class Dictionary:
 
     @staticmethod
     def clean_input(w):
+        """
+        Remove special characters from the word to make searching more efficient
+        :param w: word to clean
+        :return: cleaned string
+        """
         w = w.replace('=', '')  # clean up
         w = w.replace('\n', '')
         w = w.replace('+', '')
@@ -42,6 +54,11 @@ class Dictionary:
         return w.lower()  # set to lowercase
 
     def word_in(self, w):
+        """
+        Check if the word is in the dictionary
+        :param w: word to check
+        :return: boolean, true if in
+        """
         word_in = False
         if w in self.data.keys() or w in string.whitespace:
             word_in = True

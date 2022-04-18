@@ -1,5 +1,16 @@
 class FileManager:
+    """
+    Handles file path and makes it accessible to other classes
+    """
     def __init__(self):
+        self.filename = FileManager.validate_filepath()
+
+    @staticmethod
+    def validate_filepath():
+        """
+        Ask user for file path and validate it
+        :return: valid filepath
+        """
         fn = -1
         while fn == -1:
             try:
@@ -10,4 +21,4 @@ class FileManager:
                 print("Invalid file name. Try a different one.")
                 fn = -1
 
-        self.fn = fn
+        return fn

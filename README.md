@@ -24,7 +24,7 @@ Finally, the FileManager class handles the file path for the file to read and wr
 
 ## Class Diagram
 UML Class Diagram of each class and its functions. Initializers are only shown if they have helper functions as well.
-<img width="808" alt="image" src="https://user-images.githubusercontent.com/57777918/163883677-c60ec6bf-4cf0-4c16-b588-7d201d2aa857.png">
+<img width="320" alt="image" src="https://user-images.githubusercontent.com/57777918/163883677-c60ec6bf-4cf0-4c16-b588-7d201d2aa857.png">
  
 ## GitHub
 https://github.com/fraander/spellchecker-eece2140project

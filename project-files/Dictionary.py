@@ -6,8 +6,6 @@ from fuzzywuzzy import fuzz
 class Dictionary:
 
     def find_similar(self, word):
-        # https://towardsdatascience.com/fuzzy-string-matching-in-python-68f240d910fe
-
         similar = []
         ratio_min = 95  # set initial fuzzy-wuzzy threshold
 
@@ -26,6 +24,7 @@ class Dictionary:
 
         similar = sorted(similar, key=lambda s: s[1])  # return words sorted by ratio
         similar = similar[::-1]
+        similar = similar[0:3]
         return similar
 
     @staticmethod
@@ -38,6 +37,7 @@ class Dictionary:
         w = w.replace('&', '')
         w = w.replace('#', '')
         w = w.replace(':', '')
+        w = w.replace('’', "'")
 
         return w.lower()  # set to lowercase
 

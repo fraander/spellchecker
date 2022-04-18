@@ -3,8 +3,6 @@ from Dictionary import Dictionary
 from FileManager import FileManager
 
 
-# TODO: cannot handle whitespace at end of file right now
-
 class GrammarChecker:
     @staticmethod
     def print_options(options, buffer):
@@ -38,7 +36,7 @@ class GrammarChecker:
 
     def __init__(self):
         dictionary = Dictionary()  # dictionary
-        filename = "doc_wrong.txt"  # FileManager().fn  # file manager
+        filename = FileManager().fn  # file manager
 
         with open("edited+" + filename, 'w') as o:
             with open(filename, 'r') as f:  # open read and write files
@@ -67,7 +65,6 @@ class GrammarChecker:
                             GrammarChecker.print_options(options, buffer)  # print options
                             buffer = GrammarChecker.get_choice(options, w)  # get choice from user
 
-                        o.write(buffer)  # check for type of trailing whitespace
                         if buffer[:-1] + c == "\n":  # if new-line, change c to new-line
                             c = "\n"
                         elif buffer[:-1] + c == "\t":  # if a tab, change c to tab

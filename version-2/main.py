@@ -1,9 +1,3 @@
-from Dictionary import Dictionary
-import string
+from SpellCheck import SpellCheck
 
-d = Dictionary()
-
-suggestions = []
-w = "word"
-
-print(d.suggest_words(w))
+SpellCheck()

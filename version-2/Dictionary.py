@@ -108,7 +108,7 @@ class Dictionary:
         :param w: word to clean
         :return: cleaned string
         """
-        w = w.strip("=+^.&#:’")
+        w = w.strip("=+^.&#:’ ")
         w = w.replace('\n', '')
         w = w.lower()
         return w
@@ -119,8 +119,10 @@ class Dictionary:
         :param w: word to check
         :return: word or False if not in dictionary
         """
+        w = self.clean_input(w)
+        w = w.lower()
         try:
-            return self.data[w.lower()]
+            return self.data[w]
         except KeyError:
             return False
 

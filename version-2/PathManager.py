@@ -1,6 +1,3 @@
-import string
-
-
 class PathManager:
     """
     Handles file path and makes it accessible to other classes

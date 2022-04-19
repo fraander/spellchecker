@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="68773a5b-a776-4dd8-8507-6abd151ca349" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../version-2/Dictionary.py" beforeDir="false" afterPath="$PROJECT_DIR$/../version-2/Dictionary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../version-2/FileManager.py" beforeDir="false" afterPath="$PROJECT_DIR$/../version-2/PathManager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../version-2/SpellCheck.py" beforeDir="false" afterPath="$PROJECT_DIR$/../version-2/SpellCheck.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../version-2/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../version-2/main.py" afterDir="false" />
     </list>
@@ -87,7 +87,7 @@
       <workItem from="1650389445656" duration="799000" />
       <workItem from="1650391500767" duration="18000" />
       <workItem from="1650391637597" duration="294000" />
-      <workItem from="1650391951848" duration="886000" />
+      <workItem from="1650391951848" duration="1294000" />
     </task>
     <servers />
   </component>

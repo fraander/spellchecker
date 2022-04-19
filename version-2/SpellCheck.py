@@ -69,7 +69,7 @@ class SpellCheck:
         with open("edited+" + filename, 'w') as o:
             with open(filename, 'r') as f:  # open read and write files
                 buffer = ""  # create a buffer so that the program is not limited in memory and can read large files
-                capitalize = False
+                should_process = False
 
                 while True:
                     c = f.read(1)  # read by character
@@ -77,13 +77,26 @@ class SpellCheck:
                     if not c:  # reached eof
                         break
 
+                    # run a series of checks for what word to process
                     if c in string.punctuation or c in string.whitespace:
-                        if buffer in string.whitespace:
-                            print(buffer, end="")
-                        elif not dictionary.check_word(buffer):
-                            print("**", buffer, "**", c, sep="", end="")
+                        # process word up to, then write punctuation
+                        should_process = buffer
+
+                    if should_process:
+                        if dictionary.get_word(should_process):
+                            print(should_process, sep="", end="")
+                            print(c, end="")
                         else:
-                            print(buffer + c, end="")
+                            if should_process in string.whitespace:
+                                print(should_process, end="")
+                            elif len(should_process) > 0 and should_process[0] in string.whitespace:
+                                print(should_process[0], end="")
+                                print("**", should_process[1:], "**", sep="", end="")  # TODO: process word
+                            else:
+                                print("**", should_process, "**", sep="", end="")  # TODO: process word
+                            print(c, end="")
                         buffer = ""
+                        should_process = None
                     else:
                         buffer += c
+

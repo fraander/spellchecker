@@ -35,7 +35,7 @@ class Dictionary:
         def insertion_test():
             """
             Inserts a letter a->z at each spot in the word and checks if that makes a valid word
-            :return: no return, just modifies `suggestions` array
+            :return: array of suggestions
             """
             s = []
 
@@ -51,7 +51,7 @@ class Dictionary:
         def shuffle_test():
             """
             Tries rearranging each adjacent set of letters and checks if that makes a valid word
-            :return: no return, just modifies `suggestions` array
+            :return: array of suggestions
             """
 
             s = []
@@ -70,6 +70,23 @@ class Dictionary:
 
             print("shuffle", s)
             return s
+
+        def remove_test():
+            """
+            Tries removing each letter in the word and seeing if that makes a valid word
+            :return: array of suggestions
+            """
+
+            s = []
+
+            for index in range(1, len(w)):
+                test = w[0:index-1] + w[index:]
+
+                if self.check_word(test) and test not in s and test != w:
+                    s.append(test)
+
+            return s
+
 
         def space_test():
             """

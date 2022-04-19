@@ -1,3 +1,6 @@
+import string
+
+
 class Dictionary:
 
     @staticmethod

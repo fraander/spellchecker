@@ -3,7 +3,33 @@ import string
 
 class Dictionary:
 
-    def check_word(self, w):
+    def spell_check_word(self, should_process):
+        def search_plain_word():
+            return self.get_word(should_process)
+
+        def search_simple_plural():
+            return len(should_process) > 1 and should_process[-1] != "y" \
+                   and should_process[-1] == "s" and self.get_word(should_process[:-1])
+
+        def search_complex_plural():
+            return len(should_process) > 3 and should_process[-3:] == "ies" \
+                   and self.get_word(should_process[:-3] + "y")
+
+        def search_simple_possessive():
+            return len(should_process) > 2 and should_process[-2:] == "’s" and self.get_word(
+                should_process[:-2])
+
+        def search_complex_possessive():
+            return len(should_process) > 2 and should_process[-2:] == "s’" and self.get_word(
+                should_process[:-2])
+
+        def is_whitespace():
+            return should_process in string.whitespace
+
+        return search_plain_word() or search_simple_plural() or search_complex_plural() or \
+            search_simple_possessive() or search_complex_possessive() or is_whitespace()
+
+    def is_word(self, w):
         """
         Check if word is in the dictionary
         :param w: word to check
@@ -14,7 +40,7 @@ class Dictionary:
         else:
             return False
 
-    def suggest_words(self, w):
+    def suggest_words(self, w):  # TODO: Improve suggestions for larger errors
 
         def replace_test():
             """
@@ -26,7 +52,7 @@ class Dictionary:
             for index in range(1, len(w)):
                 for c in string.ascii_lowercase:
                     test = w[0:index-1] + c + w[index:]
-                    if self.check_word(test) and test not in s and test != w:
+                    if self.is_word(test) and test not in s and test != w:
                         s.append(test)
             return s
 
@@ -40,7 +66,7 @@ class Dictionary:
             for index in range(0, len(w)):
                 for c in string.ascii_lowercase:
                     test = w[0:index] + c + w[index:]
-                    if self.check_word(test) and test not in s and test != w:
+                    if self.is_word(test) and test not in s and test != w:
                         s.append(test)
             return s
 
@@ -59,7 +85,7 @@ class Dictionary:
                 rest = w[index + 2:]  # +
                 test = prev + curr_plus_one + curr + rest
 
-                if self.check_word(test) and test not in s and test != w:
+                if self.is_word(test) and test not in s and test != w:
                     s.append(test)
 
             return s
@@ -75,7 +101,7 @@ class Dictionary:
             for index in range(1, len(w)):
                 test = w[0:index-1] + w[index:]
 
-                if self.check_word(test) and test not in s and test != w:
+                if self.is_word(test) and test not in s and test != w:
                     s.append(test)
 
             return s
@@ -91,7 +117,7 @@ class Dictionary:
             for index in range(1, len(w)-1):
                 first = w[0:index]
                 last = w[index:]
-                if self.check_word(first) and self.check_word(last):
+                if self.is_word(first) and self.is_word(last):
                     s.append(first + " " + last)
 
             return s

@@ -3,7 +3,7 @@ from Dictionary import Dictionary
 from PathManager import PathManager
 
 
-class SpellCheck:  # TODO: separate UI from spell-check logic
+class SpellCheckApp:
     """
     Processes business logic for checker, handles reading/writing files, asking user for replacement words
     """
@@ -54,7 +54,7 @@ class SpellCheck:  # TODO: separate UI from spell-check logic
                 opt_in = int(opt_in)
 
                 if opt_in == len(options):
-                    return SpellCheck.get_custom(w)
+                    return SpellCheckApp.get_custom(w)
                 elif opt_in == len(options) + 1:
                     return w
                 else:
@@ -73,29 +73,6 @@ class SpellCheck:  # TODO: separate UI from spell-check logic
     def plain_output_word(c, should_process):
         print(should_process, sep="", end="")
         print(c, end="")
-
-    def spell_check_word(self, should_process):
-        def search_plain_word():
-            return self.dictionary.get_word(should_process)
-
-        def search_simple_plural():
-            return len(should_process) > 1 and should_process[-1] != "y" \
-                   and should_process[-1] == "s" and self.dictionary.get_word(should_process[:-1])
-
-        def search_complex_plural():
-            return len(should_process) > 3 and should_process[-3:] == "ies" \
-                   and self.dictionary.get_word(should_process[:-3] + "y")
-
-        def search_simple_possessive():
-            return len(should_process) > 2 and should_process[-2:] == "’s" and self.dictionary.get_word(
-                should_process[:-2])
-
-        def search_complex_possessive():
-            return len(should_process) > 2 and should_process[-2:] == "s’" and self.dictionary.get_word(
-                should_process[:-2])
-
-        return search_plain_word() or search_simple_plural() or search_complex_plural() or \
-            search_simple_possessive() or search_complex_possessive()
 
     def __init__(self):
         self.dictionary = Dictionary()  # dictionary
@@ -118,18 +95,15 @@ class SpellCheck:  # TODO: separate UI from spell-check logic
                         should_process = buffer
 
                     if should_process:
-                        if self.spell_check_word(should_process):
+                        if self.dictionary.spell_check_word(should_process):
                             self.plain_output_word(c, should_process)
                         else:  # word not in dictionary
-                            if should_process in string.whitespace:
-                                print(should_process, end="")
-                            elif len(should_process) > 0 and should_process[0] in string.whitespace:
+                            # double check leading whitespace
+                            if len(should_process) > 0 and should_process[0] in string.whitespace:
                                 print(should_process[0], end="")
-                                self.edit_word(should_process)
-                            else:
-                                self.edit_word(should_process)
-                            print(c, end="")
-                        buffer = ""
-                        should_process = None
+                            self.edit_word(should_process)  # edit found word
+                            print(c, end="")  # print trailing whitespace
+                        buffer = ""  # clear buffer
+                        should_process = None  # clear edit buffer
                     else:
-                        buffer += c
+                        buffer += c  # increase buffer

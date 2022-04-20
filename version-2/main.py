@@ -1,3 +1,3 @@
-from SpellCheck import SpellCheck
+from SpellCheckApp import SpellCheckApp
 
-SpellCheck()
+SpellCheckApp()

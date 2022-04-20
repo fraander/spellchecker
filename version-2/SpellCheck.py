@@ -3,7 +3,7 @@ from Dictionary import Dictionary
 from PathManager import PathManager
 
 
-class SpellCheck:
+class SpellCheck:  # TODO: separate UI from spell-check logic
     """
     Processes business logic for checker, handles reading/writing files, asking user for replacement words
     """

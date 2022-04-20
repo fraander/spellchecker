@@ -69,11 +69,39 @@ class SpellCheck:
                 opt_in = -1
                 print("Invalid input. Try again.")
 
+    @staticmethod
+    def plain_output_word(c, should_process):
+        print(should_process, sep="", end="")
+        print(c, end="")
+
+    def spell_check_word(self, should_process):
+        def search_plain_word():
+            return self.dictionary.get_word(should_process)
+
+        def search_simple_plural():
+            return len(should_process) > 1 and should_process[-1] != "y" \
+                   and should_process[-1] == "s" and self.dictionary.get_word(should_process[:-1])
+
+        def search_complex_plural():
+            return len(should_process) > 3 and should_process[-3:] == "ies" \
+                   and self.dictionary.get_word(should_process[:-3] + "y")
+
+        def search_simple_possessive():
+            return len(should_process) > 2 and should_process[-2:] == "’s" and self.dictionary.get_word(
+                should_process[:-2])
+
+        def search_complex_possessive():
+            return len(should_process) > 2 and should_process[-2:] == "s’" and self.dictionary.get_word(
+                should_process[:-2])
+
+        return search_plain_word() or search_simple_plural() or search_complex_plural() or \
+            search_simple_possessive() or search_complex_possessive()
+
     def __init__(self):
         self.dictionary = Dictionary()  # dictionary
         self.filename = PathManager().filename  # path-manager
 
-        with open("edited+" + self.filename, 'w') as o:
+        with open("edited+" + self.filename, 'w') as o:  # TODO: output file
             with open(self.filename, 'r') as f:  # open read and write files
                 buffer = ""  # create a buffer so that the program is not limited in memory and can read large files
                 should_process = False
@@ -89,30 +117,14 @@ class SpellCheck:
                         # process word up to, then write punctuation
                         should_process = buffer
 
-                        # TODO: plurals, proper nouns
-
                     if should_process:
-                        if self.dictionary.get_word(should_process):  # search word as is
-                            print(should_process, sep="", end="")
-                            print(c, end="")
-                        elif len(should_process) > 2 and should_process[-2:] == "’s":  # search possessive
-                            if self.dictionary.get_word(should_process[:-2]):
-                                print(should_process, sep="", end="")
-                                print(c, end="")
-                            else:
-                                self.edit_word(should_process)
-                        elif len(should_process) > 2 and should_process[-2:] == "s’":  # search alternate possessive
-                            if self.dictionary.get_word(should_process[:-2]):
-                                print(should_process, sep="", end="")
-                                print(c, end="")
-                            else:
-                                self.edit_word(should_process)
+                        if self.spell_check_word(should_process):
+                            self.plain_output_word(c, should_process)
                         else:  # word not in dictionary
                             if should_process in string.whitespace:
                                 print(should_process, end="")
                             elif len(should_process) > 0 and should_process[0] in string.whitespace:
                                 print(should_process[0], end="")
-
                                 self.edit_word(should_process)
                             else:
                                 self.edit_word(should_process)
@@ -121,4 +133,3 @@ class SpellCheck:
                         should_process = None
                     else:
                         buffer += c
-

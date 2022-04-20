@@ -89,13 +89,25 @@ class SpellCheck:
                         # process word up to, then write punctuation
                         should_process = buffer
 
-                        # TODO: plurals, possessives, proper nouns
+                        # TODO: plurals, proper nouns
 
                     if should_process:
-                        if self.dictionary.get_word(should_process):
+                        if self.dictionary.get_word(should_process):  # search word as is
                             print(should_process, sep="", end="")
                             print(c, end="")
-                        else:
+                        elif len(should_process) > 2 and should_process[-2:] == "’s":  # search possessive
+                            if self.dictionary.get_word(should_process[:-2]):
+                                print(should_process, sep="", end="")
+                                print(c, end="")
+                            else:
+                                self.edit_word(should_process)
+                        elif len(should_process) > 2 and should_process[-2:] == "s’":  # search alternate possessive
+                            if self.dictionary.get_word(should_process[:-2]):
+                                print(should_process, sep="", end="")
+                                print(c, end="")
+                            else:
+                                self.edit_word(should_process)
+                        else:  # word not in dictionary
                             if should_process in string.whitespace:
                                 print(should_process, end="")
                             elif len(should_process) > 0 and should_process[0] in string.whitespace:

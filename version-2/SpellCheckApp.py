@@ -8,11 +8,19 @@ class SpellCheckApp:
     Processes business logic for checker, handles reading/writing files, asking user for replacement words
     """
 
-    def edit_word(self, should_process):
+    def edit_word(self, should_process, file):
+        """
+        Ask user for word to use instead of displayed word
+        :param should_process: word to change
+        :param file: file to write result to
+        :return: None
+        """
         options = self.dictionary.suggest_words(should_process)
         self.print_options(options, buffer=should_process)
         choice = self.get_choice(options, w=should_process)
+
         print("~", choice, "~", sep="", end="")
+        file.write(choice)
 
     @staticmethod
     def get_custom(w):
@@ -70,16 +78,34 @@ class SpellCheckApp:
                 print("Invalid input. Try again.")
 
     @staticmethod
-    def plain_output_word(c, should_process):
-        print(should_process, sep="", end="")
-        print(c, end="")
+    def plain_output_word(c, should_process, file):
+        """
+        Output word without any special formatting to console and file
+        :param c: trailing character
+        :param should_process: word to output
+        :param file: file to output to
+        :return: None
+        """
+        SpellCheckApp.output_string(file, should_process)
+        SpellCheckApp.output_string(file, c)
+
+    @staticmethod
+    def output_string(file, s):
+        """
+        Output string to console and to file
+        :param file: file to write to
+        :param s: String to write
+        :return: None
+        """
+        print(s, sep="", end="")
+        file.write(s)
 
     def __init__(self):
         self.dictionary = Dictionary()  # dictionary
-        self.filename = PathManager().filename  # path-manager
+        self.path_manager = PathManager()  # path-manager
 
-        with open("edited+" + self.filename, 'w') as o:  # TODO: output file
-            with open(self.filename, 'r') as f:  # open read and write files
+        with open(self.path_manager.write_filename, 'w') as o:  # open output file
+            with open(self.path_manager.read_filename, 'r') as f:  # open read and write files
                 buffer = ""  # create a buffer so that the program is not limited in memory and can read large files
                 should_process = False
 
@@ -96,13 +122,12 @@ class SpellCheckApp:
 
                     if should_process:
                         if self.dictionary.spell_check_word(should_process):
-                            self.plain_output_word(c, should_process)
+                            self.plain_output_word(c, should_process, o)
                         else:  # word not in dictionary
-                            # double check leading whitespace
                             if len(should_process) > 0 and should_process[0] in string.whitespace:
-                                print(should_process[0], end="")
-                            self.edit_word(should_process)  # edit found word
-                            print(c, end="")  # print trailing whitespace
+                                self.output_string(o, should_process)  # print leading whitespace
+                            self.edit_word(should_process, o)  # edit found word
+                            self.output_string(o, c)  # print trailing whitespace
                         buffer = ""  # clear buffer
                         should_process = None  # clear edit buffer
                     else:

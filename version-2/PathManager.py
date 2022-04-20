@@ -4,7 +4,8 @@ class PathManager:
     """
 
     def __init__(self):
-        self.filename = PathManager.get_valid_filepath()
+        self.read_filename = PathManager.get_valid_filepath()
+        self.write_filename = "edited+" + self.read_filename
 
     @staticmethod
     def get_valid_filepath():

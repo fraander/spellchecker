@@ -4,26 +4,56 @@ import string
 class Dictionary:
 
     def spell_check_word(self, should_process):
+        """
+        Check if a word is misspelled
+        :param should_process: word to check
+        :return: True if valid word or whitespace, False otherwise
+        """
+
         def search_plain_word():
+            """
+            Check if the word is a valid word
+            :return: True if valid
+            """
             return self.get_word(should_process)
 
         def search_simple_plural():
+            """
+            Check singular form of given plural is a word (s -> "")
+            :return: True if valid
+            """
             return len(should_process) > 1 and should_process[-1] != "y" \
                    and should_process[-1] == "s" and self.get_word(should_process[:-1])
 
         def search_complex_plural():
+            """
+            Check if plural form of given word is valid (ies -> y)
+            :return: True if valid
+            """
             return len(should_process) > 3 and should_process[-3:] == "ies" \
-                   and self.get_word(should_process[:-3] + "y")
+                and self.get_word(should_process[:-3] + "y")
 
         def search_simple_possessive():
+            """
+            Check if non-possessive form of word is a valid word (...'s -> ...)
+            :return: True if valid
+            """
             return len(should_process) > 2 and should_process[-2:] == "’s" and self.get_word(
                 should_process[:-2])
 
         def search_complex_possessive():
+            """
+            Check if non-possessive form of word is a valid word (...s' -> ...)
+            :return: True if valid
+            """
             return len(should_process) > 2 and should_process[-2:] == "s’" and self.get_word(
                 should_process[:-2])
 
         def is_whitespace():
+            """
+            Check if given string is whitespace (" ", "\n", "\t", etc.)
+            :return: True if whitespace
+            """
             return should_process in string.whitespace
 
         return search_plain_word() or search_simple_plural() or search_complex_plural() or \
@@ -41,6 +71,13 @@ class Dictionary:
             return False
 
     def suggest_words(self, w):  # TODO: Improve suggestions for larger errors
+        """
+        Suggest words based on the given word using a variety of algorithms to generate new strings to test from
+        given string.
+        More efficient than comparing similarity to every word in the dictionary.
+        :param w: word to base suggestions off of
+        :return: List of suggestions
+        """
 
         def replace_test():
             """
@@ -51,7 +88,7 @@ class Dictionary:
 
             for index in range(1, len(w)):
                 for c in string.ascii_lowercase:
-                    test = w[0:index-1] + c + w[index:]
+                    test = w[0:index - 1] + c + w[index:]
                     if self.is_word(test) and test not in s and test != w:
                         s.append(test)
             return s
@@ -99,7 +136,7 @@ class Dictionary:
             s = []
 
             for index in range(1, len(w)):
-                test = w[0:index-1] + w[index:]
+                test = w[0:index - 1] + w[index:]
 
                 if self.is_word(test) and test not in s and test != w:
                     s.append(test)
@@ -114,7 +151,7 @@ class Dictionary:
 
             s = []
 
-            for index in range(1, len(w)-1):
+            for index in range(1, len(w) - 1):
                 first = w[0:index]
                 last = w[index:]
                 if self.is_word(first) and self.is_word(last):

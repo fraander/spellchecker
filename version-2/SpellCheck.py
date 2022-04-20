@@ -7,6 +7,13 @@ class SpellCheck:
     """
     Processes business logic for checker, handles reading/writing files, asking user for replacement words
     """
+
+    def edit_word(self, should_process):
+        options = self.dictionary.suggest_words(should_process)
+        self.print_options(options, buffer=should_process)
+        choice = self.get_choice(options, w=should_process)
+        print("~", choice, "~", sep="", end="")
+
     @staticmethod
     def get_custom(w):
         """
@@ -48,10 +55,10 @@ class SpellCheck:
 
                 if opt_in == len(options):
                     return SpellCheck.get_custom(w)
-                if opt_in == len(options) + 1:
+                elif opt_in == len(options) + 1:
                     return w
                 else:
-                    return options[opt_in][0]
+                    return options[opt_in]
             except ValueError:
                 opt_in = -1
                 print("Invalid input. Try again.")
@@ -63,11 +70,11 @@ class SpellCheck:
                 print("Invalid input. Try again.")
 
     def __init__(self):
-        dictionary = Dictionary()  # dictionary
-        filename = PathManager().filename  # path-manager
+        self.dictionary = Dictionary()  # dictionary
+        self.filename = PathManager().filename  # path-manager
 
-        with open("edited+" + filename, 'w') as o:
-            with open(filename, 'r') as f:  # open read and write files
+        with open("edited+" + self.filename, 'w') as o:
+            with open(self.filename, 'r') as f:  # open read and write files
                 buffer = ""  # create a buffer so that the program is not limited in memory and can read large files
                 should_process = False
 
@@ -82,8 +89,10 @@ class SpellCheck:
                         # process word up to, then write punctuation
                         should_process = buffer
 
+                        # TODO: plurals, possessives, proper nouns
+
                     if should_process:
-                        if dictionary.get_word(should_process):
+                        if self.dictionary.get_word(should_process):
                             print(should_process, sep="", end="")
                             print(c, end="")
                         else:
@@ -91,9 +100,10 @@ class SpellCheck:
                                 print(should_process, end="")
                             elif len(should_process) > 0 and should_process[0] in string.whitespace:
                                 print(should_process[0], end="")
-                                print("**", should_process[1:], "**", sep="", end="")  # TODO: process word
+
+                                self.edit_word(should_process)
                             else:
-                                print("**", should_process, "**", sep="", end="")  # TODO: process word
+                                self.edit_word(should_process)
                             print(c, end="")
                         buffer = ""
                         should_process = None

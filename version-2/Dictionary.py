@@ -28,8 +28,6 @@ class Dictionary:
                     test = w[0:index-1] + c + w[index:]
                     if self.check_word(test) and test not in s and test != w:
                         s.append(test)
-
-            print("replace", s)
             return s
 
         def insertion_test():
@@ -44,8 +42,6 @@ class Dictionary:
                     test = w[0:index] + c + w[index:]
                     if self.check_word(test) and test not in s and test != w:
                         s.append(test)
-
-            print("insert", s)
             return s
 
         def shuffle_test():
@@ -63,12 +59,9 @@ class Dictionary:
                 rest = w[index + 2:]  # +
                 test = prev + curr_plus_one + curr + rest
 
-                # print(prev, curr, curr_plus_one, rest, test)
-
                 if self.check_word(test) and test not in s and test != w:
                     s.append(test)
 
-            print("shuffle", s)
             return s
 
         def remove_test():
@@ -87,7 +80,6 @@ class Dictionary:
 
             return s
 
-
         def space_test():
             """
             add a space at each spot in the word and check if both words are valid words
@@ -96,13 +88,11 @@ class Dictionary:
 
             s = []
 
-            for index in range(1,len(w)-1):
+            for index in range(1, len(w)-1):
                 first = w[0:index]
                 last = w[index:]
                 if self.check_word(first) and self.check_word(last):
                     s.append(first + " " + last)
-
-            print("space", s)
 
             return s
 
@@ -112,6 +102,7 @@ class Dictionary:
         suggestions = suggestions + insertion_test()
         suggestions = suggestions + replace_test()
         suggestions = suggestions + shuffle_test()
+        suggestions = suggestions + remove_test()
         # suggestions = suggestions + space_test()
 
         output = list(set(suggestions))  # remove duplicate values
@@ -127,6 +118,8 @@ class Dictionary:
         """
         w = w.strip("=+^.&#:’ ")
         w = w.replace('\n', '')
+        w = w.replace('\t', '')
+        w = w.replace("’", "'")
         w = w.lower()
         return w
 

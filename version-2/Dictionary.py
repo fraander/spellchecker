@@ -70,7 +70,9 @@ class Dictionary:
         else:
             return False
 
-    def suggest_words(self, w):  # TODO: Improve suggestions for larger errors
+    def suggest_words(self, w):
+        # TODO: check options have not been filled before generating more suggestions
+        # TODO: Improve suggestions for larger errors
         """
         Suggest words based on the given word using a variety of algorithms to generate new strings to test from
         given string.
@@ -79,35 +81,47 @@ class Dictionary:
         :return: List of suggestions
         """
 
-        def replace_test():
+        def double_replace_test(e):
+            s = []
+
+            for index in range(2, len(e)):
+                for c in string.ascii_lowercase:
+                    for d in string.ascii_lowercase:
+                        test = e[0:index - 2] + c + d + e[index:]
+                        if self.is_word(test) and test not in s and test != e:
+                            s.append(test)
+
+            return s
+
+        def replace_test(e):
             """
             Replaces every letter in the string with a letter from a->z and checks if that makes a valid word
             :return: suggestions created by this test
             """
             s = []
 
-            for index in range(1, len(w)):
+            for index in range(1, len(e)):
                 for c in string.ascii_lowercase:
-                    test = w[0:index - 1] + c + w[index:]
-                    if self.is_word(test) and test not in s and test != w:
+                    test = e[0:index - 1] + c + e[index:]
+                    if self.is_word(test) and test not in s and test != e:
                         s.append(test)
             return s
 
-        def insertion_test():
+        def insertion_test(e):
             """
             Inserts a letter a->z at each spot in the word and checks if that makes a valid word
             :return: array of suggestions
             """
             s = []
 
-            for index in range(0, len(w)):
+            for index in range(0, len(e)):
                 for c in string.ascii_lowercase:
-                    test = w[0:index] + c + w[index:]
-                    if self.is_word(test) and test not in s and test != w:
+                    test = e[0:index] + c + e[index:]
+                    if self.is_word(test) and test not in s and test != e:
                         s.append(test)
             return s
 
-        def shuffle_test():
+        def shuffle_test(e):
             """
             Tries rearranging each adjacent set of letters and checks if that makes a valid word
             :return: array of suggestions
@@ -115,19 +129,19 @@ class Dictionary:
 
             s = []
 
-            for index in range(0, len(w) - 1):
-                prev = w[0:index]  # -
-                curr = w[index]  # i
-                curr_plus_one = w[index + 1]
-                rest = w[index + 2:]  # +
+            for index in range(0, len(e) - 1):
+                prev = e[0:index]  # -
+                curr = e[index]  # i
+                curr_plus_one = e[index + 1]
+                rest = e[index + 2:]  # +
                 test = prev + curr_plus_one + curr + rest
 
-                if self.is_word(test) and test not in s and test != w:
+                if self.is_word(test) and test not in s and test != e:
                     s.append(test)
 
             return s
 
-        def remove_test():
+        def remove_test(e):
             """
             Tries removing each letter in the word and seeing if that makes a valid word
             :return: array of suggestions
@@ -135,10 +149,10 @@ class Dictionary:
 
             s = []
 
-            for index in range(1, len(w)):
-                test = w[0:index - 1] + w[index:]
+            for index in range(1, len(e)):
+                test = e[0:index - 1] + e[index:]
 
-                if self.is_word(test) and test not in s and test != w:
+                if self.is_word(test) and test not in s and test != e:
                     s.append(test)
 
             return s
@@ -160,17 +174,7 @@ class Dictionary:
             return s
 
         # make a series of changes to each word and check if those changes produce words in the dictionary
-        suggestions = []
-
-        suggestions = suggestions + insertion_test()
-        suggestions = suggestions + replace_test()
-        suggestions = suggestions + shuffle_test()
-        suggestions = suggestions + remove_test()
-        # suggestions = suggestions + space_test()
-
-        output = list(set(suggestions))  # remove duplicate values
-
-        return sorted(output)
+        return (insertion_test(w) + replace_test(w) + shuffle_test(w) + remove_test(w) + double_replace_test(w))[0:9]
 
     @staticmethod
     def clean_input(w):

@@ -1,6 +1,6 @@
 import string
-from Dictionary import Dictionary
 from PathManager import PathManager
+from Suggester import Suggester
 
 
 class SpellCheckApp:
@@ -15,7 +15,7 @@ class SpellCheckApp:
         :param file: file to write result to
         :return: None
         """
-        options = self.dictionary.suggest_words(should_process)
+        options = self.suggester.suggest(should_process)
         self.print_options(options, buffer=should_process)
         choice = self.get_choice(options, w=should_process)
 
@@ -101,7 +101,7 @@ class SpellCheckApp:
         file.write(s)
 
     def __init__(self):
-        self.dictionary = Dictionary()  # dictionary
+        self.suggester = Suggester()  # suggestions
         self.path_manager = PathManager()  # path-manager
 
         with open(self.path_manager.write_filename, 'w') as o:  # open output file
@@ -121,7 +121,7 @@ class SpellCheckApp:
                         should_process = buffer
 
                     if should_process:
-                        if self.dictionary.spell_check_word(should_process):
+                        if self.suggester.dictionary.spell_check_word(should_process):
                             self.plain_output_word(c, should_process, o)
                         else:  # word not in dictionary
                             if len(should_process) > 0 and should_process[0] in string.whitespace:

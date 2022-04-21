@@ -22,8 +22,8 @@ class Dictionary:
             Check singular form of given plural is a word (s -> "")
             :return: True if valid
             """
-            return len(should_process) > 1 and should_process[-1] != "y" \
-                   and should_process[-1] == "s" and self.get_word(should_process[:-1])
+            return len(should_process) > 1 and should_process[-1] != "y" and should_process[-1] == "s" and \
+                self.get_word(should_process[:-1])
 
         def search_complex_plural():
             """
@@ -71,27 +71,13 @@ class Dictionary:
             return False
 
     def suggest_words(self, w):
-        # TODO: check options have not been filled before generating more suggestions
-        # TODO: Improve suggestions for larger errors
         """
         Suggest words based on the given word using a variety of algorithms to generate new strings to test from
         given string.
         More efficient than comparing similarity to every word in the dictionary.
-        :param w: word to base suggestions off of
+        param w: word to base suggestions off of
         :return: List of suggestions
         """
-
-        def double_replace_test(e):
-            s = []
-
-            for index in range(2, len(e)):
-                for c in string.ascii_lowercase:
-                    for d in string.ascii_lowercase:
-                        test = e[0:index - 2] + c + d + e[index:]
-                        if self.is_word(test) and test not in s and test != e:
-                            s.append(test)
-
-            return s
 
         def replace_test(e):
             """
@@ -103,8 +89,8 @@ class Dictionary:
             for index in range(1, len(e)):
                 for c in string.ascii_lowercase:
                     test = e[0:index - 1] + c + e[index:]
-                    if self.is_word(test) and test not in s and test != e:
-                        s.append(test)
+                    s.append(test)
+
             return s
 
         def insertion_test(e):
@@ -117,8 +103,7 @@ class Dictionary:
             for index in range(0, len(e)):
                 for c in string.ascii_lowercase:
                     test = e[0:index] + c + e[index:]
-                    if self.is_word(test) and test not in s and test != e:
-                        s.append(test)
+                    s.append(test)
             return s
 
         def shuffle_test(e):
@@ -136,8 +121,7 @@ class Dictionary:
                 rest = e[index + 2:]  # +
                 test = prev + curr_plus_one + curr + rest
 
-                if self.is_word(test) and test not in s and test != e:
-                    s.append(test)
+                s.append(test)
 
             return s
 
@@ -152,29 +136,75 @@ class Dictionary:
             for index in range(1, len(e)):
                 test = e[0:index - 1] + e[index:]
 
-                if self.is_word(test) and test not in s and test != e:
-                    s.append(test)
+                s.append(test)
 
             return s
 
-        def space_test():
+        def combine_test(e, test_1, test_2):
             """
-            add a space at each spot in the word and check if both words are valid words
-            :return: no return, just modifies `suggestions` array
+            Combine two tests with each other
+            :param e: word to base tests on
+            :param test_1: first test
+            :param test_2: second test
+            :return: result of combining tests
             """
+            out = []
+            for word in test_1(e):
+                out += test_2(word)
+            # print(process_suggestions(out))
+            return out
 
-            s = []
+        def process_suggestions(possible):
+            """
+            Return only the suggestions which are words
+            :param possible: possible words
+            :return: actual words
+            """
+            suggestions = []
+            for pos in possible:
+                if self.is_word(pos) and pos.lower() not in [n.lower() for n in suggestions]:
+                    suggestions.append(pos)
 
-            for index in range(1, len(w) - 1):
-                first = w[0:index]
-                last = w[index:]
-                if self.is_word(first) and self.is_word(last):
-                    s.append(first + " " + last)
-
-            return s
+            return suggestions
 
         # make a series of changes to each word and check if those changes produce words in the dictionary
-        return (insertion_test(w) + replace_test(w) + shuffle_test(w) + remove_test(w) + double_replace_test(w))[0:9]
+        # try each test once, then combine each with another one time
+        p = remove_test(w) + replace_test(w) + insertion_test(w) + shuffle_test(w)
+
+        sugs = process_suggestions(p)
+        p = []
+        if len(p) < 8:
+            p += combine_test(w, insertion_test, insertion_test) + \
+                combine_test(w, insertion_test, replace_test) + \
+                combine_test(w, insertion_test, shuffle_test) + \
+                combine_test(w, insertion_test, remove_test)
+
+        sugs += process_suggestions(p)
+        p = []
+        if len(p) < 8:
+            p += combine_test(w, replace_test, insertion_test) + \
+                combine_test(w, replace_test, replace_test) + \
+                combine_test(w, replace_test, shuffle_test) + \
+                combine_test(w, replace_test, remove_test)
+
+        sugs += process_suggestions(p)
+        p = []
+        if len(p) < 8:
+            p += combine_test(w, shuffle_test, insertion_test) + \
+                combine_test(w, shuffle_test, replace_test) + \
+                combine_test(w, shuffle_test, shuffle_test) + \
+                combine_test(w, shuffle_test, remove_test)
+
+        sugs += process_suggestions(p)
+        p = []
+        if len(p) < 8:
+            p += combine_test(w, remove_test, insertion_test) + \
+                combine_test(w, remove_test, replace_test) + \
+                combine_test(w, remove_test, shuffle_test) + \
+                combine_test(w, remove_test, remove_test)
+
+        return sugs[0:7]  # return only the first 7 results to not overwhelm the user
+        # remove the [0:7] to see all suggestions the algorithm produces
 
     @staticmethod
     def clean_input(w):

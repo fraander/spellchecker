@@ -35,13 +35,13 @@ https://github.com/fraander/spellchecker-eece2140project
 
 ## Libraries and Tools
 To build the program, I used two dictionary lists.
-•	“words.txt” from: https://github.com/dwyl/english-words
-•	“contractions.txt” from: https://gist.github.com/J3RN/ed7b420a6ea1d5bd6d06
+* "words.txt” from: https://github.com/dwyl/english-words
+* “contractions.txt” from: https://gist.github.com/J3RN/ed7b420a6ea1d5bd6d06
 
 ## Lessons Learned
 The biggest lesson I learned from this project was that the first solution is not the best solution. At first, I tried comparing the word to all the other words in the dictionary and returning the most similar strings, which is highly inefficient. After presenting, it was made apparent to me that most spell checkers do not use this method, because of its inefficiency. Instead, they use the method I settled on to generate a few words to check that are similar. The new method I used produced better results too, much to my chagrin!
 
-My favorite part of the project was being able to use my object-oriented programming skills. Interfacing the different classes and organizing my many methods helped me think through the different problems, and I enjoyed componentizing each operating into more generic methods. I would recommend future EECE 2140 students get comfortable working with OOP because it will make them better, more deliberate programmers.
+My favorite part of the project was being able to use my object-oriented programming skills. Interfacing the different classes and organizing my many methods helped me think through the different problems, and I enjoyed componentizing each operating into more generic methods. I would recommend future EECE 2140 students get comfortable working with OOP because it will make them more organized, more deliberate, and more efficient programmers.
 
 This project also helped me improve my Git skills. At one point I tried branching features to try a new technique, something I should have done even more. It was also much easier to try making major changes to the program with the knowledge a previous working version was safe and accessible. My hope is that future EECE 2140 students learn Git earlier in the semester and make use of it on Problem Sets as well.
 

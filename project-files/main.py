@@ -1,6 +1,8 @@
-from GrammarChecker import GrammarChecker
+from SpellCheckApp import SpellCheckApp
 
-# Turn on Soft Wrapping for the Console or else the outputs will be hard to read.
+# Ensure the file you want to read from is in the same folder as the program files.
+
+# Enable Soft Wrap to make the Console output more easily readable.
 # View -> Active Editor -> Soft Wrap
 
-GrammarChecker()
+SpellCheckApp()  # Initialize SpellCheckApp() to start the spell check application
